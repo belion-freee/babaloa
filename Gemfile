@@ -4,3 +4,4 @@ source "https://rubygems.org"
 gemspec
 
 gem "byebug", platform: :mri, group: %i(development test)
+gem "rspec_junit_formatter"
