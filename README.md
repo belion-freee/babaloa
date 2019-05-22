@@ -75,6 +75,42 @@ arr = [{ "col1" => "row2-1", "col2" => "row2-2", "col3" => "row2-3"},{"col1" => 
 Babaloa.to_csv(arr, t: {"col1" => "一番目", "col2" => "二番目", "col3" => "三番目"}) # => "一番目,二番目,三番目\nrow1-1,row1-2,row1-3\nrow2-1,row2-2,row2-3\n"
 ```
 
+## Initializer
+You can set options by default in initializers.
+
+### default
+Describes the settings applied to all csv output. The usage of the options is the same.
+
+```ruby
+Babaloa.configure {|config|
+    config.default = {
+      except: %i(updated_at created_at),
+      sort: { id: :desc },
+      t: { id: "ID", name: "NAME", age: "AGE" }
+    }
+}
+```
+
+### definition
+Describe the settings that apply separately. The usage of the options is the same.
+
+```ruby
+Babaloa.configure {|config|
+    config.definition = {
+      test: {
+        except: %i(updated_at created_at),
+        sort: { id: :desc },
+        t: { id: "ID", name: "NAME", age: "AGE" }
+      }
+    }
+}
+```
+
+And use it like this.
+
+```ruby
+Babaloa.to_csv(arr, name: :test)
+```
 
 ## Development
 
