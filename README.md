@@ -39,6 +39,7 @@ Introduces the available options.
 
 ### Sort options
 You can sort content for using sort options.
+You can use option value with Hash(only use desc) or String, Symbol.
 **Be sure to use the same hash key type as the header name** to be specified. It does not move if the type is different. In addition, in case of comparing with `2, 3, 100` note that the order will be `100, 2, 3` when comparing by character string.
 
 ```ruby
@@ -46,8 +47,31 @@ arr = [{ "col1" => "row2-1", "col2" => "row2-2", "col3" => "row2-3"},{"col1" => 
 Babaloa.to_csv(arr, sort: "col1") # => "col1,col2,col3\nrow1-1,row1-2,row1-3\nrow2-1,row2-2,row2-3\n"
 ```
 
+You can also use Hash for using desc. Like this.
+
+```ruby
+arr = [{ "col1" => "row2-1", "col2" => "row2-2", "col3" => "row2-3"},{"col1" => "row1-1", "col2" => "row1-2", "col3" => "row1-3"}]
+Babaloa.to_csv(arr, sort: "col1") # => col1,col2,col3\nrow2-1,row2-2,row2-3\nrow1-1,row1-2,row1-3\n"
+```
+
 ### Only/Except options
 You can sort content for using sort options if you use Hash for the contents of the array.
+You can use option value with Array or Symbol.
+
+```ruby
+arr = [{ "col1" => "row2-1", "col2" => "row2-2", "col3" => "row2-3"},{"col1" => "row1-1", "col2" => "row1-2", "col3" => "row1-3"}]
+Babaloa.to_csv(arr, only: %i(col1, col2)) # => "col1,col2\nrow2-1,row2-2\nrow1-1,row1-2\n"
+Babaloa.to_csv(arr, except: :col3) # => "col1,col2\nrow2-1,row2-2\nrow1-1,row1-2\n"
+```
+
+### Transrate options
+You can transrate header for using t options.
+You can only use option value with Hash.
+
+```ruby
+arr = [{ "col1" => "row2-1", "col2" => "row2-2", "col3" => "row2-3"},{"col1" => "row1-1", "col2" => "row1-2", "col3" => "row1-3"}]
+Babaloa.to_csv(arr, t: {"col1" => "一番目", "col2" => "二番目", "col3" => "三番目"}) # => "一番目,二番目,三番目\nrow1-1,row1-2,row1-3\nrow2-1,row2-2,row2-3\n"
+```
 
 
 ## Development
