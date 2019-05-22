@@ -19,8 +19,8 @@ RSpec.describe Babaloa do
     )
   end
 
-  it "has a version number" do
-    expect(Babaloa::VERSION).not_to be nil
+  it "correct version" do
+    expect(Babaloa::VERSION).to eq("0.1.1")
   end
 
   describe "to_csv" do
@@ -31,6 +31,7 @@ RSpec.describe Babaloa do
           expect(acts).to eq(exps)
         else
           acts.zip(exps) {|act_c, exp_c|
+            expect(act_c.size).to eq(exp_c.size)
             act_c.zip(exp_c) {|act, exp|
               expect(act).to eq(exp)
             }
@@ -63,12 +64,12 @@ RSpec.describe Babaloa do
     context "when with header option is true" do
       context "invalid class for first args" do
         let(:data) { "test" }
-        include_examples(:error, "raise ArgumentError", ArgumentError, "data must be Array")
+        include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "data must be Array")
       end
 
       context "content is string and header option is true" do
         let(:data) { ["test"] }
-        include_examples(:error, "raise ArgumentError", ArgumentError, "content must be Array or Hash")
+        include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "content must be Array or Hash")
       end
 
       context "data content is empty array" do
@@ -141,7 +142,7 @@ RSpec.describe Babaloa do
 
           context "by Date" do
             let(:options) { {sort: :col1} }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "row order by col1",
               [
                 %w(col1 col2 col3 col4),
                 %w(2018/12/31 2 はまやらわ rails),
@@ -153,7 +154,7 @@ RSpec.describe Babaloa do
 
           context "by Number" do
             let(:options) { {sort: :col2} }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "row order by col2",
               [
                 %w(col1 col2 col3 col4),
                 %w(2019/03/01 1 宝石 rspec),
@@ -165,7 +166,7 @@ RSpec.describe Babaloa do
 
           context "by Japanese" do
             let(:options) { {sort: :col3} }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "row order by col3",
               [
                 %w(col1 col2 col3 col4),
                 %w(2019/11/01 100 あかさたな test),
@@ -177,7 +178,7 @@ RSpec.describe Babaloa do
 
           context "by English" do
             let(:options) { {sort: :col4} }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "row order by col4",
               [
                 %w(col1 col2 col3 col4),
                 %w(2018/12/31 2 はまやらわ rails),
@@ -194,7 +195,7 @@ RSpec.describe Babaloa do
                 t: { col1: "一番目", col2: "二番目", col3: "三番目", col4: "四番目" }
               }
             }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "row order by col4 desc and transrate",
               [
                 %w(一番目 二番目 三番目 四番目),
                 %w(2019/11/01 100 あかさたな test),
@@ -205,9 +206,9 @@ RSpec.describe Babaloa do
           end
         end
 
-        context "with sort option by String" do
+        context "with t option by String" do
           let(:options) { {t: { col1: "一番目", col2: "二番目", col3: "三番目", col4: "四番目", col5: "五番目" }} }
-          include_examples(:success, "export file 5 row order by col2",
+          include_examples(:success, "transrated header",
             [
               %w(一番目 二番目 三番目 四番目 五番目),
               %w(row1-1 row1-2 row1-3 row1-4 row1-5),
@@ -274,7 +275,7 @@ RSpec.describe Babaloa do
 
         context "with only option by String" do
           let(:options) { {only: "col1"} }
-          include_examples(:error, "raise ArgumentError", ArgumentError, "only option must be Array, Symbol")
+          include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "only option must be Array, Symbol")
         end
 
         context "with except option by Array" do
@@ -307,7 +308,7 @@ RSpec.describe Babaloa do
 
         context "with except option by String" do
           let(:options) { {except: "col1"} }
-          include_examples(:error, "raise ArgumentError", ArgumentError, "except option must be Array, Symbol")
+          include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "except option must be Array, Symbol")
         end
 
         context "with sort option by Hash" do
@@ -380,7 +381,7 @@ RSpec.describe Babaloa do
 
           context "by Date" do
             let(:options) { {sort: :col1} }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "row order by col1",
               [
                 %w(col1 col2 col3 col4),
                 %w(2018/12/31 2 はまやらわ rails),
@@ -392,7 +393,7 @@ RSpec.describe Babaloa do
 
           context "by Number" do
             let(:options) { {sort: :col2} }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "row order by col2",
               [
                 %w(col1 col2 col3 col4),
                 %w(2019/03/01 1 宝石 rspec),
@@ -404,7 +405,7 @@ RSpec.describe Babaloa do
 
           context "by Japanese" do
             let(:options) { {sort: :col3} }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "row order by col3",
               [
                 %w(col1 col2 col3 col4),
                 %w(2019/11/01 100 あかさたな test),
@@ -416,7 +417,7 @@ RSpec.describe Babaloa do
 
           context "by English" do
             let(:options) { {sort: :col4} }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "row order by col4",
               [
                 %w(col1 col2 col3 col4),
                 %w(2018/12/31 2 はまやらわ rails),
@@ -434,7 +435,7 @@ RSpec.describe Babaloa do
                 t: { col1: "一番目", col2: "二番目", col3: "三番目", col4: "四番目"}
               }
             }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "order by col4 desc and only col1 col4 and trasrate",
               [
                 %w(一番目 四番目),
                 %w(2019/11/01 test),
@@ -458,7 +459,7 @@ RSpec.describe Babaloa do
               }
             }
             let(:options) { { name: :test } }
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "order by col4 desc and only col4 and trasrate",
               [
                 %w(四番目),
                 %w(test),
@@ -486,7 +487,7 @@ RSpec.describe Babaloa do
               }
             }
 
-            include_examples(:success, "export file 5 row order by col2",
+            include_examples(:success, "order by col4 desc and only col4 and trasrate",
               [
                 %w(四番目),
                 %w(test),
@@ -499,12 +500,12 @@ RSpec.describe Babaloa do
 
         context "with sort option by Array" do
           let(:options) { {sort: %i(col1 col2)} }
-          include_examples(:error, "raise ArgumentError", ArgumentError, "sort option must be Hash, Symbol, String.")
+          include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "sort option must be Hash, Symbol, String.")
         end
 
-        context "with sort option by String" do
+        context "with t option by Hash" do
           let(:options) { {t: { col1: "一番目", col2: "二番目", col3: "三番目", col4: "四番目", col5: "五番目" }} }
-          include_examples(:success, "export file 5 row order by col2",
+          include_examples(:success, "transrated header",
             [
               %w(一番目 二番目 三番目 四番目 五番目),
               %w(row1-1 row1-2 row1-3 row1-4 row1-5),
@@ -518,7 +519,7 @@ RSpec.describe Babaloa do
 
         context "with t option by Array" do
           let(:options) { {t: %i(col1 col2)} }
-          include_examples(:error, "raise ArgumentError", ArgumentError, "t option must be Hash")
+          include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "t option must be Hash")
         end
       end
     end
@@ -528,12 +529,12 @@ RSpec.describe Babaloa do
 
       context "data content is empty hash" do
         let(:data) { [{}] }
-        include_examples(:error, "raise ArgumentError", ArgumentError, "Header required if content is Hash")
+        include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "Header required if content is Hash")
       end
 
       context 'content is not Array or Hash' do
         let(:data) { ["test"] }
-        include_examples(:error, "raise ArgumentError", ArgumentError, "content must be Array or Hash")
+        include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "content must be Array or Hash")
       end
 
       context "data is empty" do
