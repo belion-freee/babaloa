@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/belion-freee/babaloa/tree/master.svg?style=svg&circle-token=b9268fffd3d7fe1e2d7639b718a4c307c761c607)](https://circleci.com/gh/belion-freee/babaloa/tree/master)
+
 # Babaloa
 
 This is a gem that will convert to CSV if you pass an array. In addition to conversion, sorting, column specification, and translation can be optionally specified.
