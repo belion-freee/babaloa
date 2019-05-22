@@ -1,14 +1,14 @@
 require "babaloa/version"
 require "babaloa/config"
 require "csv"
-require "byebug" # TODO: debugger
+
 module Babaloa
   class BabaloaError < StandardError; end
 
   class << self
     def to_csv(data, h = true, **options)
-      raise ArgumentError, "data must be Array" unless data.is_a?(Array)
-      raise ArgumentError, "content must be Array or Hash" unless data.empty? || data.first.is_a?(Array) || data.first.is_a?(Hash)
+      raise BabaloaError, "data must be Array" unless data.is_a?(Array)
+      raise BabaloaError, "content must be Array or Hash" unless data.empty? || data.first.is_a?(Array) || data.first.is_a?(Hash)
 
       if h && !data.empty?
         if data.first.is_a?(Hash)
@@ -24,10 +24,10 @@ module Babaloa
       end
 
       CSV.generate do |csv|
-        csv << transrate_by(header, **options) if h && header
+        csv << transrate_by(header.dup, **options) if h && header
         data.each{|res|
           if res.is_a?(Hash)
-            raise ArgumentError, "Header required if content is Hash" unless h
+            raise BabaloaError, "Header required if content is Hash" unless h
             csv << header.map {|k| res[k] || res[k.to_s] }
           else
             csv << res
@@ -49,7 +49,7 @@ module Babaloa
         sort = header.index(sort.to_sym) if data.first.is_a?(Array)
         data.sort_by! {|col| col[sort] }
       else
-        raise ArgumentError, "sort option must be Hash, Symbol, String."
+        raise BabaloaError, "sort option must be Hash, Symbol, String."
       end
 
       data
@@ -64,7 +64,7 @@ module Babaloa
       elsif only.is_a?(Symbol)
         header.select! {|k| only == k }
       else
-        raise ArgumentError, "only option must be Array, Symbol"
+        raise BabaloaError, "only option must be Array, Symbol"
       end
 
       header
@@ -79,7 +79,7 @@ module Babaloa
       elsif except.is_a?(Symbol)
         header.reject! {|k| except == k }
       else
-        raise ArgumentError, "except option must be Array, Symbol"
+        raise BabaloaError, "except option must be Array, Symbol"
       end
 
       header
@@ -92,7 +92,7 @@ module Babaloa
       if t.is_a?(Hash)
         header.map! {|k| t[k] || t[k.to_s] }.compact!
       else
-        raise ArgumentError, "t option must be Hash"
+        raise BabaloaError, "t option must be Hash"
       end
 
       header
