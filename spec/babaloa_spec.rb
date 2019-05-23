@@ -20,7 +20,7 @@ RSpec.describe Babaloa do
   end
 
   it "correct version" do
-    expect(Babaloa::VERSION).to eq("0.1.1")
+    expect(Babaloa::VERSION).to eq("0.1.2")
   end
 
   describe "to_csv" do
