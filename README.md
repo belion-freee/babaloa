@@ -116,7 +116,7 @@ Babaloa.to_csv(arr, name: :test)
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `./qs spec` to run the tests. You can also run `./qs run app bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `./qs rake install`. To release a new version, update the version number in `version.rb`, and then run `./qs rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `./qs rake install`. To release a new version, update the version number in `version.rb`, and then run `./qs rake build` and `./qs run gem push pkg/babaloa-x.x.x.gem`, which will push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
