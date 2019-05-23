@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["belion-freee"]
   spec.email         = ["belion.freee@gmail.com"]
 
-  spec.summary       = %q{CSV generator gem for ActiveRecord}
-  spec.description   = %q{CSV generator gem for ActiveRecord}
+  spec.summary       = %q{CSV generator}
+  spec.description   = %q{This is a gem that will convert to CSV if you pass an array. In addition to conversion, sorting, column specification, and translation can be optionally specified. You can also register default settings in initializers.}
   spec.homepage      = "https://github.com/belion-freee/babaloa"
   spec.license       = "MIT"
 
