@@ -42,7 +42,7 @@ Introduces the available options.
 ### Sort options
 You can sort content for using sort options.
 You can use option value with Hash(only use desc) or String, Symbol.
-**Be sure to use the same hash key type as the header name** to be specified. It does not move if the type is different. In addition, in case of comparing with `2, 3, 100` note that the order will be `100, 2, 3` when comparing by character string.
+**Be sure to use the same hash key type as the header name** to be specified. It does not move if the type is different.
 
 ```ruby
 arr = [{ "col1" => "row2-1", "col2" => "row2-2", "col3" => "row2-3"},{"col1" => "row1-1", "col2" => "row1-2", "col3" => "row1-3"}]
