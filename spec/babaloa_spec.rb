@@ -360,19 +360,19 @@ RSpec.describe Babaloa do
             [
               {
                 col1: "2019/11/01",
-                col2: 100,
+                col2: "100",
                 col3: "あかさたな",
                 col4: "test"
               },
               {
                 col1: "2019/03/01",
-                col2: 1,
+                col2: "1",
                 col3: "宝石",
                 col4: "rspec"
               },
               {
                 col1: "2018/12/31",
-                col2: 2,
+                col2: "2",
                 col3: "はまやらわ",
                 col4: "rails"
               },

@@ -40,14 +40,16 @@ module Babaloa
       sort = options[:sort] || configuration.define(options[:name], :sort) || configuration.default[:sort]
       return data unless sort
 
+      conv = proc {|v| v.is_a?(String) && v =~ /^\d+$/ ? v.to_i : v }
+
       if sort.is_a?(Hash)
         k, v = sort.first
         k = header.index(k.to_sym) if data.first.is_a?(Array)
-        data.sort_by! {|col| col[k] }
+        data.sort_by! {|col| conv.(col[k]) }
         data.reverse! if v == :desc
       elsif sort.is_a?(Symbol) || sort.is_a?(String)
         sort = header.index(sort.to_sym) if data.first.is_a?(Array)
-        data.sort_by! {|col| col[sort] }
+        data.sort_by! {|col| conv.(col[sort]) }
       else
         raise BabaloaError, "sort option must be Hash, Symbol, String."
       end
