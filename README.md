@@ -36,6 +36,15 @@ arr = [{"col1" => "row1-1", "col2" => "row1-2", "col3" => "row1-3"},{ "col1" => 
 Babaloa.to_csv(arr) # => "col1,col2,col3\nrow1-1,row1-2,row1-3\nrow2-1,row2-2,row2-3\n"
 ```
 
+### Ruby on Rails
+If you use Ruby on Rails, you must to convert ActiveRecord object to Hash.
+The easiest way is to add `map(&:attributes)` at the end of the search results.
+
+```ruby
+arr = SomeModel.all.map(&:attributes)
+Babaloa.to_csv(arr)
+```
+
 ## Options
 Introduces the available options.
 
