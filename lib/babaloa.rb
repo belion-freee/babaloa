@@ -67,7 +67,7 @@ module Babaloa
       if only.is_a?(Array)
         header.select! {|k| only.include?(k) }
       elsif is_s?(only)
-        header.select! {|k| correct?(k, only) }
+        header.select! {|k| k == only.to_sym }
       else
         raise BabaloaError, "only option must be Array, Symbol, String."
       end
@@ -82,7 +82,7 @@ module Babaloa
       if except.is_a?(Array)
         header.reject! {|k| except.include?(k) }
       elsif is_s?(except)
-        header.reject! {|k| correct?(k, except) }
+        header.reject! {|k| k == except.to_sym }
       else
         raise BabaloaError, "except option must be Array, Symbol, String."
       end
@@ -107,10 +107,6 @@ module Babaloa
 
       def is_s?(val)
         val.is_a?(Symbol) || val.is_a?(String)
-      end
-
-      def correct?(k, v)
-        v.to_s == k || v.to_sym == k
       end
   end
 end

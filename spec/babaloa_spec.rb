@@ -384,7 +384,7 @@ RSpec.describe Babaloa do
 
         context "with sort option by String" do
           let(:data) { hash_data(5).map {|h| Hash[ h.map{ |k, v| [k.to_s, v] } ] }.reverse }
-          let(:options) { {sort: "col2"} }
+          let(:options) { {sort: :col2} }
           include_examples(:success, "export file 5 row order by col2",
             [
               %w(col1 col2 col3 col4 col5),
@@ -434,7 +434,7 @@ RSpec.describe Babaloa do
           end
 
           context "by Number" do
-            let(:options) { {sort: :col2} }
+            let(:options) { {sort: "col2"} }
             include_examples(:success, "row order by col2",
               [
                 %w(col1 col2 col3 col4),
@@ -458,7 +458,7 @@ RSpec.describe Babaloa do
           end
 
           context "by English" do
-            let(:options) { {sort: :col4} }
+            let(:options) { {sort: "col4"} }
             include_examples(:success, "row order by col4",
               [
                 %w(col1 col2 col3 col4),
