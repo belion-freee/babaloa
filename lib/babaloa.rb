@@ -40,16 +40,19 @@ module Babaloa
       sort = options[:sort] || configuration.define(options[:name], :sort) || configuration.default[:sort]
       return data unless sort
 
-      conv = proc {|v| v.is_a?(String) && v =~ /^\d+$/ ? v.to_i : v }
+      conv = proc {|h, k|
+        v = h[k] || h[k.to_s] || h[k.to_sym]
+        v.is_a?(String) && v =~ /^\d+$/ ? v.to_i : v
+      }
 
       if sort.is_a?(Hash)
         k, v = sort.first
         k = header.index(k.to_sym) if data.first.is_a?(Array)
-        data.sort_by! {|col| conv.(col[k]) }
+        data.sort_by! {|col| conv.(col, k) }
         data.reverse! if v == :desc
-      elsif sort.is_a?(Symbol) || sort.is_a?(String)
+      elsif is_s?(sort)
         sort = header.index(sort.to_sym) if data.first.is_a?(Array)
-        data.sort_by! {|col| conv.(col[sort]) }
+        data.sort_by! {|col| conv.(col, sort) }
       else
         raise BabaloaError, "sort option must be Hash, Symbol, String."
       end
@@ -63,10 +66,10 @@ module Babaloa
 
       if only.is_a?(Array)
         header.select! {|k| only.include?(k) }
-      elsif only.is_a?(Symbol)
-        header.select! {|k| only == k }
+      elsif is_s?(only)
+        header.select! {|k| k == only.to_sym }
       else
-        raise BabaloaError, "only option must be Array, Symbol"
+        raise BabaloaError, "only option must be Array, Symbol, String."
       end
 
       header
@@ -78,10 +81,10 @@ module Babaloa
 
       if except.is_a?(Array)
         header.reject! {|k| except.include?(k) }
-      elsif except.is_a?(Symbol)
-        header.reject! {|k| except == k }
+      elsif is_s?(except)
+        header.reject! {|k| k == except.to_sym }
       else
-        raise BabaloaError, "except option must be Array, Symbol"
+        raise BabaloaError, "except option must be Array, Symbol, String."
       end
 
       header
@@ -92,12 +95,18 @@ module Babaloa
       return header unless t
 
       if t.is_a?(Hash)
-        header.map! {|k| t[k] || t[k.to_s] }.compact!
+        header.map! {|k| t[k] || t[k.to_s] || k }.compact!
       else
         raise BabaloaError, "t option must be Hash"
       end
 
       header
     end
+
+    private
+
+      def is_s?(val)
+        val.is_a?(Symbol) || val.is_a?(String)
+      end
   end
 end
