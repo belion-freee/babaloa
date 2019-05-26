@@ -20,7 +20,7 @@ RSpec.describe Babaloa do
   end
 
   it "correct version" do
-    expect(Babaloa::VERSION).to eq("0.1.3")
+    expect(Babaloa::VERSION).to eq("0.1.4")
   end
 
   describe "to_csv" do
@@ -219,6 +219,20 @@ RSpec.describe Babaloa do
             ]
           )
         end
+
+        context "with t option with part of transration" do
+          let(:options) { {t: { col1: "一番目", col2: "二番目", col3: "三番目"}} }
+          include_examples(:success, "transrated header",
+            [
+              %w(一番目 二番目 三番目 col4 col5),
+              %w(row1-1 row1-2 row1-3 row1-4 row1-5),
+              %w(row2-1 row2-2 row2-3 row2-4 row2-5),
+              %w(row3-1 row3-2 row3-3 row3-4 row3-5),
+              %w(row4-1 row4-2 row4-3 row4-4 row4-5),
+              %w(row5-1 row5-2 row5-3 row5-4 row5-5)
+            ]
+          )
+        end
       end
 
       context "export file with Hash" do
@@ -275,7 +289,21 @@ RSpec.describe Babaloa do
 
         context "with only option by String" do
           let(:options) { {only: "col1"} }
-          include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "only option must be Array, Symbol")
+          include_examples(:success, "export file 5 row only col1",
+            [
+              %w(col1),
+              %w(row1-1),
+              %w(row2-1),
+              %w(row3-1),
+              %w(row4-1),
+              %w(row5-1)
+            ]
+          )
+        end
+
+        context "with only option by Integer" do
+          let(:options) { {only: 1} }
+          include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "only option must be Array, Symbol, String.")
         end
 
         context "with except option by Array" do
@@ -308,7 +336,21 @@ RSpec.describe Babaloa do
 
         context "with except option by String" do
           let(:options) { {except: "col1"} }
-          include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "except option must be Array, Symbol")
+          include_examples(:success, "export file 5 row except col1",
+            [
+              %w(col2 col3 col4 col5),
+              %w(row1-2 row1-3 row1-4 row1-5),
+              %w(row2-2 row2-3 row2-4 row2-5),
+              %w(row3-2 row3-3 row3-4 row3-5),
+              %w(row4-2 row4-3 row4-4 row4-5),
+              %w(row5-2 row5-3 row5-4 row5-5)
+            ]
+          )
+        end
+
+        context "with except option by Integer" do
+          let(:options) { {except: 1} }
+          include_examples(:error, "raise Babaloa::BabaloaError", Babaloa::BabaloaError, "except option must be Array, Symbol, String.")
         end
 
         context "with sort option by Hash" do
